@@ -1,5 +1,8 @@
 package recfun
 
+import scala.::
+import scala.annotation.tailrec
+
 object RecFun extends RecFunInterface:
 
   def main(args: Array[String]): Unit =
@@ -12,7 +15,20 @@ object RecFun extends RecFunInterface:
   /**
    * Exercise 1
    */
-  def pascal(c: Int, r: Int): Int = ???
+  def pascal(c: Int, r: Int): Int = {
+    @tailrec
+    def generateRows(rowNum: Int, middle: Seq[Int], rows: Seq[Seq[Int]] = Seq(Seq.empty)): Seq[Seq[Int]] = {
+      val nextRow = 1 +: middle.sliding(2).toSeq.map(_.sum) :+ 1
+//      if (rowNum == 0) List(List(1, 1))
+      if (rowNum < c) {
+        generateRows(rowNum + 1, nextRow, rows :+ nextRow)
+      } else {
+        rows
+      }
+    }
+    val triangle: Seq[Seq[Int]] = generateRows(0, Seq(1, 1))
+    triangle(c)(r)
+  }
 
   /**
    * Exercise 2
